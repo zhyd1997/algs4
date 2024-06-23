@@ -1,0 +1,3 @@
+tasks:
+  - name: setup algs4 env
+  - init: sudo bash ./setup.sh
