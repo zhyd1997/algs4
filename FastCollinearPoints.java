@@ -4,11 +4,11 @@ import edu.princeton.cs.algs4.StdDraw;
 import edu.princeton.cs.algs4.StdOut;
 
 public class FastCollinearPoints {
-    public LineSegment[] lineSegments;
-    int count = 0;
+    private LineSegment[] lineSegments;
+    private int count = 0;
 
-    Point start;
-    Point end;
+    private Point start;
+    private Point end;
 
     // finds all line segments containing 4 or more points
     public FastCollinearPoints(Point[] points) {

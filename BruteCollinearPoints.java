@@ -9,11 +9,11 @@ import edu.princeton.cs.algs4.StdOut;
  * check whether the three slopes between p and q, between p and r, and between p and s are all equal.
  */
 public class BruteCollinearPoints {
-    public LineSegment[] lineSegments;
-    int count = 0;
+    private LineSegment[] lineSegments;
+    private int count = 0;
 
-    Point start;
-    Point end;
+    private Point start;
+    private Point end;
 
 
     // finds all line segments containing 4 points
