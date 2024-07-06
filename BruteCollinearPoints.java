@@ -1,0 +1,110 @@
+/**
+ * A program that examines 4 points at a time and checks whether they all lie on the same line segment,
+ * returning all such line segments.
+ * <p>
+ * To check whether the 4 points p, q, r, and s are collinear,
+ * check whether the three slopes between p and q, between p and r, and between p and s are all equal.
+ */
+public class BruteCollinearPoints {
+    public LineSegment[] lineSegments;
+    int count = 0;
+
+    Point start;
+    Point end;
+
+
+    // finds all line segments containing 4 points
+    public BruteCollinearPoints(Point[] points) {
+        // if the argument to the constructor is null
+        if (points == null) {
+            throw new IllegalArgumentException();
+        }
+        // if any point in the array is null
+        for (Point p : points) {
+            if (p == null) {
+                throw new IllegalArgumentException();
+            }
+        }
+        // if the argument to the constructor contains a repeated point
+        for (int i = 0; i < points.length; i++) {
+            Point p = points[i];
+
+            for (int j = i + 1; j < points.length; j++) {
+                Point q = points[j];
+
+                if (p.compareTo(q) == 0) {
+                    throw new IllegalArgumentException();
+                }
+            }
+        }
+
+        getLineSegments(points);
+    }
+
+    // the number of line segments
+    public int numberOfSegments() {
+        return lineSegments.length;
+    }
+
+    // the line segments
+    public LineSegment[] segments() {
+        return lineSegments;
+    }
+
+    private void getLineSegments(Point[] points) {
+        LineSegment[] temp = new LineSegment[points.length];
+
+        for (int i = 0; i < points.length; i++) {
+            Point p = points[i];
+
+            start  = p;
+            end = p;
+
+            for (int j = i + 1; j < points.length; j++) {
+                Point q = points[j];
+
+                se(q);
+
+                double slope_p_q = p.slopeTo(q);
+                for (int k = j + 1; k < points.length; k++) {
+                    Point r = points[k];
+                    double slope_p_r = p.slopeTo(r);
+
+                    if (slope_p_q != slope_p_r) continue;
+
+                    se(r);
+
+                    for (int l = k + 1; l < points.length; l++) {
+                        Point s = points[l];
+                        double slope_p_s = p.slopeTo(s);
+
+                        if (slope_p_r == slope_p_s) {
+                            se(s);
+
+                            LineSegment lineSegment = new LineSegment(start, end);
+
+                            temp[count++] = lineSegment;
+                        }
+                    }
+                }
+            }
+        }
+
+        lineSegments = new LineSegment[count];
+
+        int index = 0;
+        for (int i = count - 1; i >= 0; i--) {
+            lineSegments[index++] = temp[i];
+        }
+    }
+
+    private void se(Point that) {
+        if (start.compareTo(that) > 0) {
+            start = that;
+        }
+
+        if (end.compareTo(that) < 0) {
+            end = that;
+        }
+    }
+}
