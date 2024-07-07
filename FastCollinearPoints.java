@@ -1,4 +1,5 @@
 import java.util.Arrays;
+
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdDraw;
 import edu.princeton.cs.algs4.StdOut;
@@ -118,6 +119,50 @@ public class FastCollinearPoints {
         if (end.compareTo(that) < 0) {
             end = that;
         }
+    }
+
+    private LineSegment[] deduplicate(LineSegment[] input) {
+        LineSegment[] output = input;
+
+        int len = 0;
+        for (int i = 0; i < input.length; i++) {
+            LineSegment l1 = input[i];
+
+            for (int j = i + 1; j < input.length; j++) {
+                LineSegment l2 = input[j];
+
+                if (l1.toString().equals(l2.toString())) {
+                    i += 1;
+                    len += 1;
+                    break;
+                }
+
+                if (j == input.length - 1) {
+                    len += 1;
+                }
+            }
+        }
+
+        output = new LineSegment[len];
+        for (int i = 0; i < input.length; i++) {
+            LineSegment l1 = input[i];
+
+            for (int j = i + 1; j < input.length; j++) {
+                LineSegment l2 = input[j];
+
+                if (l1.toString().equals(l2.toString())) {
+                    i += 1;
+                    output[--len] = l1;
+                    break;
+                }
+
+                if (j == input.length - 1) {
+                    output[--len] = l1;
+                }
+            }
+        }
+
+        return output;
     }
 
     public static void main(String[] args) {
