@@ -87,6 +87,7 @@ public class BruteCollinearPoints {
                             LineSegment lineSegment = new LineSegment(start, end);
 
                             temp[count++] = lineSegment;
+                            break;
                         }
                     }
                 }

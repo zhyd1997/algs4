@@ -85,6 +85,8 @@ public class FastCollinearPoints {
 
                         if (slope_s_p == slope_t_p) {
                             se(t);
+                            i += 1;
+                            break;
                         }
                     }
                 }
