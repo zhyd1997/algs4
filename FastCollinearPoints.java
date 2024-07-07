@@ -101,14 +101,16 @@ public class FastCollinearPoints {
             }
         }
 
-        lineSegments = new LineSegment[count];
+        LineSegment[] duplicateLS = new LineSegment[count];
 
         int idx = 0;
         for (LineSegment lineSegment : temp) {
             if (lineSegment == null) continue;
 
-            lineSegments[idx++] = lineSegment;
+            duplicateLS[idx++] = lineSegment;
         }
+
+        lineSegments = deduplicate(duplicateLS);
     }
 
     private void se(Point that) {
