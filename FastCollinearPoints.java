@@ -51,6 +51,11 @@ public class FastCollinearPoints {
 
     private void findAllLineSegments(Point[] points) {
         LineSegment[] temp = new LineSegment[points.length];
+        double[] slopes = new double[points.length];
+
+        for (int i = 0; i < slopes.length; i++) {
+            slopes[i] = -0.0;
+        }
 
         for (int i = 0; i < points.length; i++) {
             Point p = points[i];
@@ -76,7 +81,18 @@ public class FastCollinearPoints {
                 double slope_q_p = q.slopeTo(p);
                 double slope_r_p = r.slopeTo(p);
                 double slope_s_p = s.slopeTo(p);
-                if (slope_q_p == slope_r_p && slope_r_p == slope_s_p) {
+                boolean flag = false;
+
+                for (int idx = 0; idx < slopes.length; idx++) {
+                    double slope = slopes[idx];
+
+                    if (Double.compare(slope, slope_q_p) == 0) {
+                        flag = true;
+                        break;
+                    }
+                }
+
+                if (slope_q_p == slope_r_p && slope_r_p == slope_s_p && !flag) {
                     se(q);
                     se(r);
                     se(s);
@@ -86,10 +102,12 @@ public class FastCollinearPoints {
 
                         if (slope_s_p == slope_t_p) {
                             se(t);
+                            slopes[i] = slope_q_p;
                             i += 1;
                             break;
                         }
                     }
+                    slopes[i] = slope_q_p;
                 }
             }
 
@@ -101,16 +119,14 @@ public class FastCollinearPoints {
             }
         }
 
-        LineSegment[] duplicateLS = new LineSegment[count];
+        lineSegments = new LineSegment[count];
 
         int idx = 0;
         for (LineSegment lineSegment : temp) {
             if (lineSegment == null) continue;
 
-            duplicateLS[idx++] = lineSegment;
+            lineSegments[idx++] = lineSegment;
         }
-
-        lineSegments = deduplicate(duplicateLS);
     }
 
     private void se(Point that) {
@@ -121,50 +137,6 @@ public class FastCollinearPoints {
         if (end.compareTo(that) < 0) {
             end = that;
         }
-    }
-
-    private LineSegment[] deduplicate(LineSegment[] input) {
-        LineSegment[] output = input;
-
-        int len = 0;
-        for (int i = 0; i < input.length; i++) {
-            LineSegment l1 = input[i];
-
-            for (int j = i + 1; j < input.length; j++) {
-                LineSegment l2 = input[j];
-
-                if (l1.toString().equals(l2.toString())) {
-                    i += 1;
-                    len += 1;
-                    break;
-                }
-
-                if (j == input.length - 1) {
-                    len += 1;
-                }
-            }
-        }
-
-        output = new LineSegment[len];
-        for (int i = 0; i < input.length; i++) {
-            LineSegment l1 = input[i];
-
-            for (int j = i + 1; j < input.length; j++) {
-                LineSegment l2 = input[j];
-
-                if (l1.toString().equals(l2.toString())) {
-                    i += 1;
-                    output[--len] = l1;
-                    break;
-                }
-
-                if (j == input.length - 1) {
-                    output[--len] = l1;
-                }
-            }
-        }
-
-        return output;
     }
 
     public static void main(String[] args) {

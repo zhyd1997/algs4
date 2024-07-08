@@ -57,6 +57,11 @@ public class BruteCollinearPoints {
 
     private void getLineSegments(Point[] points) {
         LineSegment[] temp = new LineSegment[points.length];
+        double[] slopes = new double[points.length];
+
+        for (int i = 0; i < slopes.length; i++) {
+            slopes[i] = -0.0;
+        }
 
         for (int i = 0; i < points.length; i++) {
             Point p = points[i];
@@ -73,8 +78,18 @@ public class BruteCollinearPoints {
                 for (int k = j + 1; k < points.length; k++) {
                     Point r = points[k];
                     double slope_p_r = p.slopeTo(r);
+                    boolean flag = false;
 
-                    if (slope_p_q != slope_p_r) continue;
+                    for (int idx = 0; idx < slopes.length; idx++) {
+                        double slope = slopes[idx];
+
+                        if (Double.compare(slope, slope_p_q) == 0) {
+                            flag = true;
+                            break;
+                        }
+                    }
+
+                    if (slope_p_q != slope_p_r || flag) continue;
 
                     se(r);
 
@@ -88,6 +103,7 @@ public class BruteCollinearPoints {
                             LineSegment lineSegment = new LineSegment(start, end);
 
                             temp[count++] = lineSegment;
+                            slopes[i] = slope_p_q;
                             break;
                         }
                     }
@@ -95,14 +111,12 @@ public class BruteCollinearPoints {
             }
         }
 
-        LineSegment[] duplicateLS = new LineSegment[count];
+        lineSegments = new LineSegment[count];
 
         int index = 0;
         for (int i = count - 1; i >= 0; i--) {
-            duplicateLS[index++] = temp[i];
+            lineSegments[index++] = temp[i];
         }
-
-        lineSegments = deduplicate(duplicateLS);
     }
 
     private void se(Point that) {
@@ -113,50 +127,6 @@ public class BruteCollinearPoints {
         if (end.compareTo(that) < 0) {
             end = that;
         }
-    }
-
-    private LineSegment[] deduplicate(LineSegment[] input) {
-        LineSegment[] output = input;
-
-        int len = 0;
-        for (int i = 0; i < input.length; i++) {
-            LineSegment l1 = input[i];
-
-            for (int j = i + 1; j < input.length; j++) {
-                LineSegment l2 = input[j];
-
-                if (l1.toString().equals(l2.toString())) {
-                    i += 1;
-                    len += 1;
-                    break;
-                }
-
-                if (j == input.length - 1) {
-                    len += 1;
-                }
-            }
-        }
-
-        output = new LineSegment[len];
-        for (int i = 0; i < input.length; i++) {
-            LineSegment l1 = input[i];
-
-            for (int j = i + 1; j < input.length; j++) {
-                LineSegment l2 = input[j];
-
-                if (l1.toString().equals(l2.toString())) {
-                    i += 1;
-                    output[--len] = l1;
-                    break;
-                }
-
-                if (j == input.length - 1) {
-                    output[--len] = l1;
-                }
-            }
-        }
-
-        return output;
     }
 
     public static void main(String[] args) {
