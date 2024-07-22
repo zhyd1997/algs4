@@ -134,7 +134,13 @@ public class Board {
     public boolean equals(Object y) {
         // Two boards are equal if they are have the same size and their corresponding tiles are in the same positions.
         // The equals() method is inherited from java.lang.Object, so it must obey all of Java’s requirements.
-        return board.equals(y);
+        if (y == this) return true;
+        if (y == null) return false;
+        if (y.getClass() != this.getClass()) {
+            return false;
+        }
+        Board that = (Board) y;
+        return this.equals(that);
     }
 
     // all neighboring boards
